@@ -17,6 +17,7 @@ def load_words():
     Depending on the size of the word list, this function may
     take a while to finish.
     """
+
     print("Reading word_list file...")
     # inFile: file
     inFile = open(WORDLIST_FILENAME, 'r')
@@ -56,8 +57,9 @@ def is_word_guessed(secret_word, letters_guessed):
         return false
     return true
     """
-    for i in secret_word:
-      if i not in letters_guessed:
+
+    for letter in secret_word:
+      if letter not in letters_guessed:
         return False
     return True
 
@@ -76,14 +78,15 @@ def get_guessed_word(secret_word, letters_guessed):
     returns: string, comprised of letters and underscores that represents
       what letters in secret_word have been guessed so far.
     '''
+
     # FILL IN YOUR CODE HERE...
     full_word = ''
-    for i in secret_word:
-      if i in letters_guessed:
-        full_word += i
+    for letter in secret_word:
+      if letter in letters_guessed:
+        full_word += letter
       else: 
-        full_word += ""
-    return letters_guessed
+        full_word += '_ '
+    return full_word
     
     
     
@@ -98,6 +101,7 @@ def get_available_letters(letters_guessed):
     returns: string, comprised of letters that represents what letters have not
       yet been guessed.
     '''
+
     #code 3
     import string
     alphabet = string.ascii_lowercase
@@ -131,28 +135,32 @@ def game_loop(secret_word):
 
     Follows the other limitations detailed in the problem write-up.
     '''
+
     letter_guessed = []
     guess_remaining = 8
     print ("Let the game begin!")
-    print ("")
     print ("I am thinking of a word with", len(secret_word), "letters")
+    print ("")
 
     while is_word_guessed(secret_word,letter_guessed) == False and guess_remaining > 0:
       print("You have", guess_remaining, "guesses remaining")
       print("Letters available to you:", get_available_letters(letter_guessed))
       guess_a_letter = input("Guess a letter:").lower()
+      
 
       if (guess_a_letter in get_available_letters(letter_guessed)):
-        letter_guessed.append(guess_a_letter)
+          letter_guessed.append(guess_a_letter)
+          if (guess_a_letter in secret_word):
+            print("Correct:", get_guessed_word(secret_word, letter_guessed))
+            print()
+          else:
+            print("Incorrect, this letter is not in my word", get_guessed_word(secret_word, letter_guessed))
+            print()
+            guess_remaining -= 1
       else:
-        print("You fool", get_guessed_word(secret_word, letter_guessed))
-
-      if (guess_a_letter in secret_word):
-        print("Correct:", get_guessed_word(secret_word, letter_guessed))
-      else:
-        print("Incorrect, this letter is not in my word:", get_guessed_word(secret_word, letter_guessed))
-        guess_remaining -= 1
-
+        print("You fool! you tried this letter already:", get_guessed_word(secret_word, letter_guessed))
+        print()
+        
     if (is_word_guessed(secret_word, letter_guessed)):
       print ("You WIN")
     else :
